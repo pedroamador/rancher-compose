@@ -1,0 +1,12 @@
+/test/reports/*
+
+ci-scripts/.temp
+
+# Linux
+*~
+.*~
+
+# git
+!.gitignore
+!.gitkeep
+node_modules
