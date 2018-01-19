@@ -41,19 +41,21 @@ update_deployment(){
 write_docker_compose_from_pipe(){
   local IFS; IFS=''
   
-  while read data; do
+  while read -t 2 data; do
     echo "$data" >> docker-compose.yml
   done
 }
 
 main() {
-    write_docker_compose_from_pipe;
+  write_docker_compose_from_pipe;
 
-    if [ "$EXEC" = "create" ]; then
-        deploy $HOST $PROJECT $KEY $SECRET;
-    elif [ "$EXEC" = "update" ]; then
-        update_deployment $HOST $PROJECT $KEY $SECRET;
-    fi
+  if [ "$EXEC" = "create" ]; then
+      deploy $HOST $PROJECT $KEY $SECRET;
+  elif [ "$EXEC" = "update" ]; then
+      update_deployment $HOST $PROJECT $KEY $SECRET;
+  fi
+
+  exit 0
 }
 
 main

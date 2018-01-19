@@ -1,6 +1,8 @@
 #!/bin/bash
 
-declare -A ARGV
+print_args(){
+    printf "%s\n" "${!ARGV[@]}" "${ARGV[@]}" | pr -2t
+}
 
 get_args(){
     POSITIONAL=()
@@ -51,6 +53,50 @@ get_args(){
     ARGV["secret"]=$secret
 }
 
-get_args "$@"
+show_help(){
+cat << EOF
+    Usage: cli COMANT[create|update] [OPTIONS]
+    Run rancher-compose using a docker container using a docker-compose passed by pipe.
+    Example: cat docker-compose | cli create -h <HOST:PORT/v1/> -p <PROJECT_NAME> -k <ENVIROMENT_KEY> -s <ENVIROMENT_SECRET>
 
-printf "%s\n" "${!ARGV[@]}" "${ARGV[@]}" | pr -2t
+    -h, --host          rancher host url
+    -p, --project       project name
+    -k, --key           enviroment api key
+    -s, --secret        secret api key
+EOF
+}
+
+exec() {
+    local version host project key secret
+    version="test"
+    cmd=$1
+    host=$2
+    project=$3
+    key=$4
+    secret=$5
+
+    docker run \
+    --rm \
+    -i \
+    -e EXEC=create \
+    -e HOST=$host \
+    -e PROJECT=$project \
+    -e KEY=$key \
+    -e SECRET=$secret \
+    -e EXEC=$cmd \
+    redpandaci/rancher-compose:$version  
+}
+
+main(){
+    get_args "$@"
+    if [ ${ARGV[cmd]} = "--help" ]; then
+        show_help
+    else
+        exec ${ARGV[cmd]} ${ARGV[host]} ${ARGV[project]} ${ARGV[key]} ${ARGV[secret]}
+    fi
+
+    exit 0
+}
+
+declare -A ARGV
+main "$@"
