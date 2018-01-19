@@ -1,5 +1,9 @@
 #!/bin/bash
 
+CONFIG_PATH=~/.rancher-redpanda
+AUTH_FILE=auth
+AUTH_FILE_PATH=$CONFIG_PATH/$AUTH_FILE
+
 print_args(){
     printf "%s\n" "${!ARGV[@]}" "${ARGV[@]}" | pr -2t
 }
@@ -59,6 +63,14 @@ get_args(){
     ARGV["file"]=$file
 }
 
+get_args_from_auth_file(){
+    local key value IFS auth
+    while IFS="=" read key value
+    do
+        ARGV[$key]=$value
+    done < <(cat $AUTH_FILE_PATH)
+}
+
 show_help(){
 cat << EOF
     Usage: cli [create|update] [-h, --host] [-p --project] [-k --key] [-s --secret] [-f --file]
@@ -71,6 +83,19 @@ cat << EOF
     -s, --secret        secret api key
     -f, --file          docker-compose file path
 EOF
+}
+
+store_auth(){
+    local host key secret
+    echo 'Rancher host:'; read host
+    echo 'Enviroment API key:'; read -s key
+    echo 'Enviroment API secret:'; read -s secret
+
+    mkdir -p $CONFIG_PATH
+
+    echo "host=$host" > $AUTH_FILE_PATH
+    echo "key=$key" >> $AUTH_FILE_PATH
+    echo "secret=$secret" >> $AUTH_FILE_PATH
 }
 
 exec() {
@@ -98,8 +123,16 @@ exec() {
 
 main(){
     get_args "$@"
+
+    if [ -e $AUTH_FILE_PATH ]
+    then
+        get_args_from_auth_file
+    fi
+
     if [ ${ARGV[cmd]} = "--help" ]; then
         show_help
+    elif [ ${ARGV[cmd]} = "auth" ]; then
+        store_auth
     else
         exec ${ARGV[cmd]} ${ARGV[host]} ${ARGV[project]} ${ARGV[key]} ${ARGV[secret]} ${ARGV[file]}
     fi
