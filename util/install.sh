@@ -15,7 +15,7 @@ install(){
     url="https://raw.githubusercontent.com/red-panda-ci/rancher-compose/$version/util/cli.sh"
 
     echo "Instaling redpanda-rancher"
-    download_cli $url $path
+    download_cli $url $path;
     chmod +x $path
     echo "done"
 }

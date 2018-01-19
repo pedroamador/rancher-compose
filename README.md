@@ -5,6 +5,23 @@ _rancher-compose cli dockerized._
 _Supported tags and respective `Dockerfile` links:_
 [`test`, `latest`, `1.0.0`](Dockerfile)
 
+### Install script
+
+using cURL:
+
+```sh
+
+curl -o- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/develop/util/install.sh | bash
+
+```
+
+or Wget:
+
+```sh
+
+wget -qO- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/develop/util/install.sh | bash
+
+```
 ## Use
 
 ```bash
