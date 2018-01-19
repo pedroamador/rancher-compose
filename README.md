@@ -3,17 +3,42 @@
 _rancher-compose cli dockerized._
 
 _Supported tags and respective `Dockerfile` links:_
-[`test`, `latest`](Dockerfile)
+[`test`, `latest`, `1.0.0`](Dockerfile)
 
 ## Use
 
 ```bash
+
+cat docker-compose.yml | \
+docker run \
+--rm \
+-i \
+-e HOST=<HOST>:<PORT>/v1/ \
+-e PROJECT=<PROJECT> \
+-e KEY=<ENVIRONMENT_KEY> \
+-e SECRET=<ENVIRONMENT_SECRET> \
+-e EXEC=create \
+redpandaci/rancher-compose:1.0.0
+
+# usage with cli util
+
+redpanda-rancher create -h <HOST>:<PORT>/v1/ -p <PROJECT> -k <ENVIRONMENT_KEY> -s <ENVIRONMENT_SECRET> -f /some/path/docker-compose.yml
+redpanda-rancher update -h <HOST>:<PORT>/v1/ -p <PROJECT> -k <ENVIRONMENT_KEY> -s <ENVIRONMENT_SECRET> -f /some/path/docker-compose.yml
+
+# show help
+
+redpanda-rancher --help
 
 ```
 
 ## version
 
 - rancher-compose `v0.12.5`
+
+## commands
+
+* create
+* update
 
 ## How to develop?
 
