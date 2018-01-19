@@ -68,7 +68,7 @@ EOF
 
 exec() {
     local version host project key secret
-    version="test"
+    version="latest"
     cmd=$1
     host=$2
     project=$3
