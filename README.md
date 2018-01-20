@@ -1,17 +1,20 @@
 # rancher-compose
 
-_rancher-compose cli dockerized._
-
+Deploy or update projects on a rancher Server.
 _Supported tags and respective `Dockerfile` links:_
 [`test`, `latest`, `1.0.0`](Dockerfile)
 
-### Install script
+## How does it work?
 
-using cURL:
+It is a bash wrapper that uses a rancher-compose image to have delocalised infrastructure.
+
+## Install CLI script
+
+using curl:
 
 ```sh
 
-curl -o- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/develop/util/install.sh | bash
+curl -o- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/1.0.0/util/install.sh | bash
 
 ```
 
@@ -19,10 +22,12 @@ or Wget:
 
 ```sh
 
-wget -qO- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/develop/util/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/1.0.0/util/install.sh | bash
 
 ```
 ## Use
+
+Using docker image:
 
 ```bash
 
@@ -37,25 +42,24 @@ docker run \
 -e EXEC=create \
 redpandaci/rancher-compose:1.0.0
 
-# usage with cli util
+```
+Using cli:
+
+```bash
 
 redpanda-rancher create -h <HOST>:<PORT>/v1/ -p <PROJECT> -k <ENVIRONMENT_KEY> -s <ENVIRONMENT_SECRET> -f /some/path/docker-compose.yml
-redpanda-rancher update -h <HOST>:<PORT>/v1/ -p <PROJECT> -k <ENVIRONMENT_KEY> -s <ENVIRONMENT_SECRET> -f /some/path/docker-compose.yml
-
-# show help
-
-redpanda-rancher --help
-
-```
-
+``` 
 ## version
 
 - rancher-compose `v0.12.5`
 
-## commands
+## CLI commands
 
 * create
 * update
+* auth
+* uninstall
+* --help
 
 ## How to develop?
 
@@ -63,7 +67,7 @@ redpanda-rancher --help
 - upgrade Dockerfile
 - run `npm test` or `bin/test.sh`
 - commit your changes
-- publish new image
+- publish new image or execute bin/publish.sh <VERSION>
 
 ## Considerations
 

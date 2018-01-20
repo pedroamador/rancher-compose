@@ -1,5 +1,6 @@
 #!/bin/bash
 
+CLI_PATH="/usr/local/bin/redpanda-rancher"
 CONFIG_PATH=~/.rancher-redpanda
 AUTH_FILE=auth
 AUTH_FILE_PATH=$CONFIG_PATH/$AUTH_FILE
@@ -8,7 +9,7 @@ print_args(){
     printf "%s\n" "${!ARGV[@]}" "${ARGV[@]}" | pr -2t
 }
 
-get_args(){
+get_args_from_user_params(){
     POSITIONAL=()
     local cdm host project key secret file
     cmd=$1
@@ -71,21 +72,69 @@ get_args_from_auth_file(){
     done < <(cat $AUTH_FILE_PATH)
 }
 
+get_args(){
+    get_args_from_user_params "$@"
+
+    if [ -e $AUTH_FILE_PATH ]; then
+        get_args_from_auth_file
+    fi
+}
+
+validate_args(){
+    local isValidUrl host
+    isValidUrl='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+    host=${ARGV[host]}
+
+    if [[ ! $host =~ $isValidUrl ]]
+    then
+        echo "Invalid host: $host"
+        exit 1
+    fi
+
+    for key in ${!ARGV[@]}
+    do
+        if [ -z $(echo -e ${ARGV[$key]} | tr -d '[:space:]') ]; then
+            echo "Invalid value for $key, use --help"
+            exit 1  
+        fi
+    done
+}
+
 show_help(){
 cat << EOF
-    Usage: cli [create|update] [-h, --host] [-p --project] [-k --key] [-s --secret] [-f --file]
-    Run rancher-compose using a docker container using a docker-compose passed by pipe.
-    Example: cat docker-compose | cli create -h <HOST:PORT/v1/> -p <PROJECT_NAME> -k <ENVIROMENT_KEY> -s <ENVIROMENT_SECRET>
+    Usage: redpanda-rancher COMMAND [OPTIONS]
 
-    -h, --host          rancher host url
-    -p, --project       project name
-    -k, --key           enviroment api key
-    -s, --secret        secret api key
-    -f, --file          docker-compose file path
+    Commands:
+
+    create      Deploy a project 
+    update      Update a deployed project     
+    auth        Set rancher host auth
+    uninstall   Remove redpanda-rancher cli
+    --help      Show help
+
+    Options:
+
+    -h, --host      Rancher host
+    -p --project    Project name
+    -k --key        Enviroment key
+    -s --secret     Enviroment secret 
+    -f --file       Path to docker-compose file
+
+    Examples:
+
+        Example: 
+
+            redpanda-rancher create -h <HOST:PORT/v1/> -p <PROJECT_NAME> -k <ENVIROMENT_KEY> -s <ENVIROMENT_SECRET> -f docker-compose.yml
+        
+        Example with auth:
+        
+            redpanda-rancher auth
+            redpanda-rancher create -p <PROJECT_NAME> -f docker-compose.yml
+
 EOF
 }
 
-store_auth(){
+store_auth_from_user_input(){
     local host key secret
     echo 'Rancher host:'; read host
     echo 'Enviroment API key:'; read -s key
@@ -121,24 +170,35 @@ exec() {
     redpandaci/rancher-compose:$version  
 }
 
-main(){
-    get_args "$@"
-
-    if [ -e $AUTH_FILE_PATH ]
-    then
-        get_args_from_auth_file
-    fi
-
-    if [ ${ARGV[cmd]} = "--help" ]; then
-        show_help
-    elif [ ${ARGV[cmd]} = "auth" ]; then
-        store_auth
-    else
-        exec ${ARGV[cmd]} ${ARGV[host]} ${ARGV[project]} ${ARGV[key]} ${ARGV[secret]} ${ARGV[file]}
-    fi
-
-    exit 0
+remove_cli(){
+    rm -rf $CONFIG_PATH
+    rm -rf $CLI_PATH
 }
 
 declare -A ARGV
+main(){
+    get_args "$@"
+
+    case ${ARGV[cmd]} in
+    --help)
+        show_help
+    ;;
+    auth)
+        store_auth_from_user_input
+    ;;
+    create|update)
+        validate_args
+        exec ${ARGV[cmd]} ${ARGV[host]} ${ARGV[project]} ${ARGV[key]} ${ARGV[secret]} ${ARGV[file]}
+    ;;
+    uninstall)
+        remove_cli
+    ;;
+    *)
+        echo "command not found, use --help"
+        exit 1
+    ;;
+    esac
+    exit 0
+}
+
 main "$@"
