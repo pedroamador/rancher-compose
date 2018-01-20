@@ -1,6 +1,6 @@
 {
   "name": "rancher-compose",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "rancher-compose cli dockerized",
   "main": "index.js",
   "scripts": {
