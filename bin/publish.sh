@@ -55,7 +55,7 @@ update_git_flow_branches(){
 main(){
   local RELEASE
   RELEASE=$(cond "$RELEASE" "$RELEASE" "$1")
-  IMAGE="redpandaci/ubuntu-dind"
+  IMAGE="redpandaci/rancher-compose"
 
   RELEASE_IMAGE="$IMAGE:$RELEASE"
   LATEST_IMAGE="$IMAGE:latest"
