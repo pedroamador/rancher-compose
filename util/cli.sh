@@ -1,9 +1,12 @@
 #!/bin/bash
 
+CLI_VERSION="v1.0.0"
+RANCHER_COMPOSE_VERSION="v0.12.5"
 CLI_PATH="/usr/local/bin/redpanda-rancher"
 CONFIG_PATH=~/.rancher-redpanda
 AUTH_FILE=auth
 AUTH_FILE_PATH=$CONFIG_PATH/$AUTH_FILE
+
 
 print_args(){
     printf "%s\n" "${!ARGV[@]}" "${ARGV[@]}" | pr -2t
@@ -110,8 +113,7 @@ cat << EOF
     update      Update a deployed project     
     auth        Set rancher host auth
     uninstall   Remove redpanda-rancher cli
-    --help      Show help
-
+    
     Options:
 
     -h, --host      Rancher host
@@ -132,6 +134,10 @@ cat << EOF
             redpanda-rancher create -p <PROJECT_NAME> -f docker-compose.yml
 
 EOF
+}
+
+show_version(){
+    echo "redpanda-rancher $CLI_VERSION, rancher-compose $RANCHER_COMPOSE_VERSION"
 }
 
 store_auth_from_user_input(){
@@ -183,6 +189,9 @@ main(){
     --help)
         show_help
     ;;
+    --version|-v)
+        show_version
+    ;;
     auth)
         store_auth_from_user_input
     ;;
@@ -193,9 +202,10 @@ main(){
     uninstall)
         remove_cli
     ;;
-    *)
-        echo "command not found, use --help"
-        exit 1
+    *)  
+        show_version
+        show_help
+        echo "command not found"
     ;;
     esac
     exit 0
