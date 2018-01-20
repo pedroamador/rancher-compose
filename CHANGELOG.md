@@ -9,6 +9,7 @@
 
 ### Fix
 
+* Fix cli.sh remote path ([d985349aca81e8977b0d9d5e3f43b10b19ba8309](https://github.com/red-panda-ci/rancher-compose/commit/d985349aca81e8977b0d9d5e3f43b10b19ba8309))
 * Fix download cli error ([fd461cc6a029dbf2cc38b6e064f58f0c6e6e7e89](https://github.com/red-panda-ci/rancher-compose/commit/fd461cc6a029dbf2cc38b6e064f58f0c6e6e7e89))
 * Set correct name image for publish.sh script ([323c33924752ce80259c3f5e795950fbeb515353](https://github.com/red-panda-ci/rancher-compose/commit/323c33924752ce80259c3f5e795950fbeb515353))
 
@@ -21,6 +22,7 @@
 * Adds uninstall cli command ([d356df6f9a6cd04cdeac5d2e85970120e245a1e2](https://github.com/red-panda-ci/rancher-compose/commit/d356df6f9a6cd04cdeac5d2e85970120e245a1e2))
 * Implement arvg parser ([e7866231e216ca46b485366e65f8cc93de237358](https://github.com/red-panda-ci/rancher-compose/commit/e7866231e216ca46b485366e65f8cc93de237358))
 * Implement entrypoint ([ee152b47712841f9db679916c548e9b2822a700a](https://github.com/red-panda-ci/rancher-compose/commit/ee152b47712841f9db679916c548e9b2822a700a))
+* Release to 1.0.0 ([cc433a39b90ffe65602c05648bdde2037b3ff844](https://github.com/red-panda-ci/rancher-compose/commit/cc433a39b90ffe65602c05648bdde2037b3ff844))
 
 ### Update
 
