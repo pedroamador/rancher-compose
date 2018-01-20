@@ -48,7 +48,7 @@ update_git_flow_branches(){
   git merge $relelase_branch
   git push origin develop
   git push origin master
- 
+  git push --tags
   git checkout $relelase_branch
 }
 
