@@ -9,7 +9,7 @@ download_cli(){
 
 install(){
     local url path version
-    version="1.0.0"
+    version="v1.0.0"
     path="/usr/local/bin/redpanda-rancher"
     url="https://raw.githubusercontent.com/red-panda-ci/rancher-compose/$version/util/cli.sh"
 

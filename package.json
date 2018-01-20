@@ -1,7 +1,7 @@
 {
   "name": "rancher-compose",
-  "version": "1.0.0",
-  "description": "rancher-compose cli dockerized",
+  "version": "0.0.0",
+  "description": "Deploy or update projects on a rancher server",
   "main": "index.js",
   "scripts": {
     "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",

@@ -14,7 +14,7 @@ using curl:
 
 ```sh
 
-curl -o- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/1.0.0/util/install.sh | bash
+sudo curl -o- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/1.0.0/util/install.sh | bash
 
 ```
 
@@ -22,7 +22,7 @@ or Wget:
 
 ```sh
 
-wget -qO- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/1.0.0/util/install.sh | bash
+sudo wget -qO- https://raw.githubusercontent.com/red-panda-ci/rancher-compose/1.0.0/util/install.sh | bash
 
 ```
 ## Use
