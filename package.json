@@ -1,6 +1,6 @@
 {
   "name": "rancher-compose",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Deploy or update projects on a rancher server",
   "main": "index.js",
   "scripts": {
